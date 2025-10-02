@@ -5,6 +5,10 @@ class_name	State
 signal change_state
 
 
+func _ready() -> void:
+	pass
+
+
 func Enter() -> void:
 	pass
 

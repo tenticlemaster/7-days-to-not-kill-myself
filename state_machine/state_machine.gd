@@ -1,3 +1,4 @@
+class_name StateMachine
 extends Node
 
 
@@ -12,6 +13,7 @@ var states: Dictionary
 func _ready() -> void:
 	for child in get_children():
 		states[child.name] = child
+		
 		child.change_state.connect(_on_change_state)
 	
 	starting_state.Enter()
