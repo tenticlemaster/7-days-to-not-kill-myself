@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://birw3laav5bvi"]
+
+[ext_resource type="Texture2D" uid="uid://c4yvkda6gmw2i" path="res://icon.svg" id="1_oein3"]
+[ext_resource type="Script" uid="uid://dupmy3pxqk2hc" path="res://components/hitbox.gd" id="2_s6hhk"]
+[ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://player/player.tscn" id="2_u3p1o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ygfu8"]
+size = Vector2(126, 124)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_oein3")
+
+[node name="HitBox" type="Area2D" parent="Sprite2D"]
+script = ExtResource("2_s6hhk")
+metadata/_custom_type_script = "uid://dupmy3pxqk2hc"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/HitBox"]
+position = Vector2(-3, 0)
+shape = SubResource("RectangleShape2D_ygfu8")
+
+[node name="Player" parent="." instance=ExtResource("2_u3p1o")]
+position = Vector2(289, -2)
