@@ -278,7 +278,9 @@ func _ready() -> void:
 func Enter() -> void:
 	animation_player.play(\"run\")
 	
-	target_position = home_position + Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
+	target_position.x = home_position.x + randf_range(-50.0, 50.0)
+	target_position.y = home_position.y + randf_range(-50.0, 50.0)
+	navigation_agent.target_position = target_position
 
 
 func PhysicsUpdate(_delta) -> void:
@@ -334,11 +336,12 @@ chase_state = NodePath("../Chase")
 
 [node name="Wonder" type="Node" parent="StateMachine"]
 script = SubResource("GDScript_75q1q")
-wander_range = 100.0
-speed = 50.0
 
-[node name="Chase" type="Node" parent="StateMachine"]
+[node name="Chase" type="Node" parent="StateMachine" node_paths=PackedStringArray("player_detection_area", "navigation_agent")]
 script = ExtResource("6_aswwt")
+player_detection_area = NodePath("../../PlayerDetection")
+navigation_agent = NodePath("../../NavigationAgent2D")
+speed = 100.0
 
 [node name="Attack" type="Node" parent="StateMachine"]
 script = ExtResource("5_iai0d")

@@ -1,9 +1,9 @@
 extends State
 
-@export var player: CharacterBody2D
-@export var speed: float = 1000
 
-@export var animation_player: AnimationPlayer
+@export var speed: float = 1000
+@onready var animation_player: AnimationPlayer = $"../../AnimationPlayer"
+@onready var character_body: CharacterBody2D = $"../.."
 
 
 func Enter() -> void:
@@ -14,7 +14,12 @@ func PhysicsUpdate(_delta) -> void:
 	var direction = Input.get_vector("left", "right", "up", "down")
 	
 	if !direction: 
-		ChangeStateTo("Idle")
+		ChangeStateTo("idle")
 	
-	player.velocity = direction * speed
-	player.move_and_slide()
+	if direction.x > 0:
+		character_body.transform.x = Vector2(1.0, 0.0)
+	elif direction.x < 0:
+		character_body.transform.x = Vector2(-1.0, 0.0)
+	
+	character_body.velocity = direction * speed
+	character_body.move_and_slide()

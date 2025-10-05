@@ -147,6 +147,7 @@ _data = {
 size = Vector2(39, 61)
 
 [node name="Player" type="CharacterBody2D"]
+collision_mask = 2
 script = ExtResource("1_qjkh3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -167,16 +168,13 @@ libraries = {
 script = ExtResource("2_g1dw6")
 starting_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animation_player")]
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("3_yw30f")
 player = NodePath("../..")
-animation_player = NodePath("../../AnimationPlayer")
 
-[node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animation_player")]
+[node name="Run" type="Node" parent="StateMachine"]
 script = ExtResource("4_yw30f")
-player = NodePath("../..")
 speed = 500.0
-animation_player = NodePath("../../AnimationPlayer")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("6_g6k8r")
