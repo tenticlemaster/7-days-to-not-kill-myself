@@ -175,6 +175,7 @@ animation_player = NodePath("../../AnimationPlayer")
 [node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "animation_player")]
 script = ExtResource("4_yw30f")
 player = NodePath("../..")
+speed = 500.0
 animation_player = NodePath("../../AnimationPlayer")
 
 [node name="Health" type="Node" parent="."]
