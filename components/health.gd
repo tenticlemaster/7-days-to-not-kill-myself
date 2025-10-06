@@ -5,6 +5,7 @@ class_name Health
 var health: int: set = set_health
 
 signal health_update
+signal death
 
 
 func _ready() -> void:
@@ -17,3 +18,6 @@ func set_health(new_health: int):
 	if health != clamped_new_health:
 		health = clamped_new_health
 		health_update.emit(health)
+	
+	if health == 0:
+		death.emit()
