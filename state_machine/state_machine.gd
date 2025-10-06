@@ -4,16 +4,12 @@ extends Node
 
 @export var starting_state: State
 var current_state: State
-
-
-# Use states dictionary so that we only need a state name to use it
 var states: Dictionary
 
 
 func _ready() -> void:
-	for child in get_children():
-		states[child.name] = child
-		
+	for child: State in get_children():
+		states[child.name.to_lower()] = child
 		child.change_state.connect(_on_change_state)
 	
 	starting_state.Enter()
@@ -32,6 +28,8 @@ func _on_change_state(state: State, new_state_name: String):
 	if state != current_state:
 		return
 	
+	var new_lowercase_state_name = new_state_name.to_lower()
+	
 	current_state.Exit()
-	states[new_state_name].Enter()
-	current_state = states[new_state_name]
+	states[new_lowercase_state_name].Enter()
+	current_state = states[new_lowercase_state_name]
