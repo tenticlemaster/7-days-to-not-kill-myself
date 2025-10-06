@@ -400,8 +400,8 @@ func PhysicsUpdate(_delta) -> void:
 	elif direction.x < 0:
 		sprite.flip_h = true
 	
-	character_body.move_and_slide()
 	character_body.velocity = direction * speed
+	character_body.move_and_slide()
 	
 	if navigation_agent.is_navigation_finished():
 		ChangeStateTo(\"idle\")
