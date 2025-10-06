@@ -264,35 +264,41 @@ script/source = "extends State
 
 @export var wander_range: float
 @export var speed: float
-@onready var character_body: CharacterBody2D = $\"../..\"
-@onready var animation_player: AnimationPlayer = $\"../../AnimationPlayer\"
+
 @onready var navigation_agent: NavigationAgent2D = $\"../../NavigationAgent2D\"
-var home_position: Vector2
-var target_position: Vector2
-
-
-func _ready() -> void:
-	home_position = character_body.global_position
-
 
 func Enter() -> void:
 	animation_player.play(\"run\")
 	
-	target_position = home_position + Vector2(randf_range(-wander_range, wander_range), randf_range(-wander_range, wander_range))
+	while true:
+		navigation_agent.target_position = random_point_in_circle_centered(character_body.global_position, wander_range)
+		if !navigation_agent.is_target_reachable():
+			break
 
 
 func PhysicsUpdate(_delta) -> void:
 	var direction = character_body.to_local(navigation_agent.get_next_path_position()).normalized()
-	
 	character_body.velocity = direction * speed
 	character_body.move_and_slide()
+
+
+func _on_navigation_agent_2d_navigation_finished() -> void:
+	ChangeStateTo(\"idle\")
+
+
+func _on_player_detection_body_entered(_body: Player) -> void:
+	ChangeStateTo(\"chase\")
+
+
+func random_point_in_circle_centered(center: Vector2, radius: float) -> Vector2:
+	var random_angle = randf() * TAU
+	var random_radius = sqrt(randf()) * radius
+	
+	return center + Vector2(
+		cos(random_angle) * random_radius,
+		sin(random_angle) * random_radius
+	)
 "
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_krmrl"]
-size = Vector2(135, 116)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_75q1q"]
-radius = 300.0
 
 [sub_resource type="GDScript" id="GDScript_1o6l0"]
 script/source = "extends NavigationAgent2D
@@ -301,6 +307,12 @@ script/source = "extends NavigationAgent2D
 func _ready() -> void:
 	pass
 "
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_75q1q"]
+radius = 300.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_krmrl"]
+size = Vector2(135, 116)
 
 [node name="BlueWarriror" type="CharacterBody2D"]
 collision_mask = 2
@@ -321,27 +333,37 @@ libraries = {
 &"": SubResource("AnimationLibrary_aqb41")
 }
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state")]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("character_body", "animation_player", "starting_state")]
 script = ExtResource("2_0iwyy")
+character_body = NodePath("..")
+animation_player = NodePath("../AnimationPlayer")
 starting_state = NodePath("Idle")
 metadata/_custom_type_script = "uid://bdgilp7eld00m"
 
-[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("chase_state")]
+[node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("3_jl3kx")
-chase_state = NodePath("../Chase")
-
-[node name="WonderTimer" type="Timer" parent="StateMachine/Idle"]
 
 [node name="Wonder" type="Node" parent="StateMachine"]
 script = SubResource("GDScript_75q1q")
-wander_range = 100.0
-speed = 50.0
+wander_range = 150.0
+speed = 100.0
 
 [node name="Chase" type="Node" parent="StateMachine"]
 script = ExtResource("6_aswwt")
+speed = 200.0
 
 [node name="Attack" type="Node" parent="StateMachine"]
 script = ExtResource("5_iai0d")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_layers = 0
+debug_enabled = true
+script = SubResource("GDScript_1o6l0")
+
+[node name="PlayerDetection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
+shape = SubResource("CircleShape2D_75q1q")
 
 [node name="HitBox" type="Area2D" parent="."]
 position = Vector2(1, 0)
@@ -354,19 +376,8 @@ metadata/_custom_type_script = "uid://dupmy3pxqk2hc"
 position = Vector2(7.5, 8)
 shape = SubResource("RectangleShape2D_krmrl")
 
-[node name="PlayerDetection" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
-shape = SubResource("CircleShape2D_75q1q")
-
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-avoidance_layers = 0
-debug_enabled = true
-script = SubResource("GDScript_1o6l0")
-
-[node name="Timer" type="Timer" parent="NavigationAgent2D"]
-
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine/Attack" method="_on_animation_player_animation_finished"]
-[connection signal="timeout" from="StateMachine/Idle/WonderTimer" to="StateMachine/Idle" method="_on_wonder_timer_timeout"]
+[connection signal="navigation_finished" from="NavigationAgent2D" to="StateMachine/Wonder" method="_on_navigation_agent_2d_navigation_finished"]
+[connection signal="navigation_finished" from="NavigationAgent2D" to="StateMachine/Chase" method="_on_navigation_agent_2d_navigation_finished"]
 [connection signal="body_entered" from="PlayerDetection" to="StateMachine/Idle" method="_on_player_detection_body_entered"]
-[connection signal="body_exited" from="PlayerDetection" to="StateMachine/Chase" method="_on_player_detection_body_exited"]
+[connection signal="body_entered" from="PlayerDetection" to="StateMachine/Wonder" method="_on_player_detection_body_entered"]

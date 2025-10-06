@@ -2,8 +2,6 @@ extends State
 
 
 @export var speed: float = 1000
-@onready var animation_player: AnimationPlayer = $"../../AnimationPlayer"
-@onready var character_body: CharacterBody2D = $"../.."
 
 
 func Enter() -> void:
