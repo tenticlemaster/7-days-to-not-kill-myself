@@ -1,6 +1,9 @@
 extends State
 
 
+@onready var animation_player := $"../../AnimationPlayer"
+@onready var player_detection_area := $"../../PlayerDetection"
+@onready var player: Player = $"../../../Player"
 @onready var wonder_timer := Timer.new()
 
 
@@ -10,9 +13,15 @@ func _ready() -> void:
 
 
 func Enter() -> void:
+	print("idle")
 	animation_player.play("idle")
 	
 	wonder_timer.start(randi_range(1, 3))
+
+
+func Update(_delta) -> void:
+	if player_detection_area.overlaps_body(player):
+		ChangeStateTo("chase")
 
 
 func Exit() -> void:
@@ -21,7 +30,3 @@ func Exit() -> void:
 
 func _on_timer_timeout() -> void:
 	ChangeStateTo("wonder")
-
-
-func _on_player_detection_body_entered(_body: Player) -> void:
-	ChangeStateTo("chase")

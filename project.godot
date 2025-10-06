@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="7 days not to kill myself"
-run/main_scene="uid://birw3laav5bvi"
+run/main_scene="uid://cyjsp2qpshsrn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://global.gd"
 
 [input]
 

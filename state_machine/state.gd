@@ -2,10 +2,6 @@ extends Node
 class_name	State
 
 
-var character_body: CharacterBody2D
-var animation_player: AnimationPlayer
-
-
 signal change_state
 
 

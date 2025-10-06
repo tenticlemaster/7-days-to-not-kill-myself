@@ -1,6 +1,9 @@
 extends State
 
 
+@onready var animation_player := $"../../AnimationPlayer"
+
+
 func Enter() -> void:
 	animation_player.play("idle")
 

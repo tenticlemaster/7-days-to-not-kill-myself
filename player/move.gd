@@ -1,6 +1,10 @@
 extends State
 
 
+@onready var animation_player := $"../../AnimationPlayer"
+@onready var character_body := $"../../"
+
+
 @export var speed: float = 1000
 
 
