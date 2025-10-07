@@ -6,7 +6,7 @@ extends State
 @onready var character_body := $"../.."
 @onready var navigation_agent: NavigationAgent2D = $"../../NavigationAgent2D"
 @onready var player: Player = $"../../../Player"
-@onready var player_detection_area: Area2D = $"../../PlayerDetection"
+@onready var chase_area: Area2D = $"../../PlayerDetection"
 @onready var sprite := $"../../Sprite2D"
 @onready var hitbox: Area2D = $"../../HitBox"
 
@@ -22,7 +22,7 @@ func Update(_delta) -> void:
 
 
 func PhysicsUpdate(_delta) -> void:
-	if player_detection_area.overlaps_body(player):
+	if chase_area.overlaps_body(player):
 		navigation_agent.target_position = player.position
 	
 	var direction = Vector2.ZERO

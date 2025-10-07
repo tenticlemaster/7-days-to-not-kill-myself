@@ -2,7 +2,7 @@ extends State
 
 
 @onready var animation_player := $"../../AnimationPlayer"
-@onready var player_detection_area := $"../../PlayerDetection"
+@onready var chase_area := $"../../PlayerDetection"
 @onready var player: Player = $"../../../Player"
 @onready var wonder_timer := Timer.new()
 
@@ -20,7 +20,7 @@ func Enter() -> void:
 
 
 func Update(_delta) -> void:
-	if player_detection_area.overlaps_body(player):
+	if chase_area.overlaps_body(player):
 		ChangeStateTo("chase")
 
 
