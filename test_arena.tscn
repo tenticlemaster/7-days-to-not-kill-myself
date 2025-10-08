@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://birw3laav5bvi"]
 
-[ext_resource type="PackedScene" uid="uid://blljsr5p8x58b" path="res://units/blue_warrior/blue_warriror.tscn" id="2_oein3"]
+[ext_resource type="PackedScene" uid="uid://blljsr5p8x58b" path="res://AI/warrior/blue_warriror.tscn" id="2_oein3"]
 [ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://player/player.tscn" id="2_u3p1o"]
 
 [node name="Node2D" type="Node2D"]

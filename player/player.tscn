@@ -1,19 +1,17 @@
 [gd_scene load_steps=21 format=3 uid="uid://dck7cq2ul5a1y"]
 
-[ext_resource type="Script" uid="uid://b12gw31gp2b6n" path="res://player/player.gd" id="1_qjkh3"]
+[ext_resource type="Script" uid="uid://b12gw31gp2b6n" path="res://player/states/player.gd" id="1_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://dso7ksbfdrqhh" path="res://assets/Tiny Swords (Free Pack)/Units/Black Units/Warrior/Warrior_Idle.png" id="2_boad6"]
-[ext_resource type="Script" uid="uid://bdgilp7eld00m" path="res://state_machine/state_machine.gd" id="2_g1dw6"]
 [ext_resource type="Texture2D" uid="uid://cmv85mpleajul" path="res://assets/Tiny Swords (Free Pack)/Units/Black Units/Warrior/Warrior_Run.png" id="3_rgyib"]
-[ext_resource type="Script" uid="uid://j7k4f6rcdir1" path="res://player/idle.gd" id="3_yw30f"]
+[ext_resource type="Script" uid="uid://j7k4f6rcdir1" path="res://player/states/idle.gd" id="3_yw30f"]
 [ext_resource type="Texture2D" uid="uid://b8i64jx0egx2l" path="res://assets/Tiny Swords (Free Pack)/Units/Black Units/Warrior/Warrior_Attack1.png" id="4_8t03j"]
-[ext_resource type="Script" uid="uid://3ag3yx700a3h" path="res://player/move.gd" id="4_yw30f"]
+[ext_resource type="Script" uid="uid://3ag3yx700a3h" path="res://player/states/move.gd" id="4_yw30f"]
+[ext_resource type="Script" uid="uid://cjiqps4rp4tom" path="res://player/player_state_machine.gd" id="5_8t03j"]
 [ext_resource type="Script" uid="uid://xveqqntv8i4c" path="res://components/health.gd" id="6_g6k8r"]
 [ext_resource type="Script" uid="uid://bard2vtbocnha" path="res://components/hurtbox.gd" id="7_boad6"]
 [ext_resource type="Script" uid="uid://dupmy3pxqk2hc" path="res://components/hitbox.gd" id="9_hg6s5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ntmi"]
-radius = 25.0
-height = 84.0
 
 [sub_resource type="Animation" id="Animation_hg6s5"]
 length = 0.001
@@ -330,10 +328,9 @@ _data = {
 }
 
 [sub_resource type="GDScript" id="GDScript_ebec5"]
-script/source = "extends State
+script/source = "extends PlayerState
 
 
-@export var animation_player: AnimationPlayer
 @export var sprite: Sprite2D
 
 
@@ -358,11 +355,16 @@ size = Vector2(120, 105)
 y_sort_enabled = true
 collision_mask = 2
 script = ExtResource("1_qjkh3")
+speed = 500.0
+acceleration = 1000.0
+friction = 3000.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_4ntmi")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -32)
 texture = ExtResource("2_boad6")
 hframes = 8
 
@@ -372,9 +374,13 @@ libraries = {
 }
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 20.0
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state")]
-script = ExtResource("2_g1dw6")
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_player", "player", "starting_state")]
+script = ExtResource("5_8t03j")
+animation_player = NodePath("../AnimationPlayer")
+player = NodePath("..")
 starting_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine"]
@@ -384,15 +390,15 @@ script = ExtResource("3_yw30f")
 script = ExtResource("4_yw30f")
 speed = 500.0
 
-[node name="Attack" type="Node" parent="StateMachine" node_paths=PackedStringArray("animation_player", "sprite")]
+[node name="Attack" type="Node" parent="StateMachine" node_paths=PackedStringArray("sprite")]
 script = SubResource("GDScript_ebec5")
-animation_player = NodePath("../../AnimationPlayer")
 sprite = NodePath("../../Sprite2D")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("6_g6k8r")
 
 [node name="HurtBox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+visible = false
 collision_layer = 2
 collision_mask = 64
 script = ExtResource("7_boad6")
@@ -404,6 +410,7 @@ position = Vector2(1.5, 3.5)
 shape = SubResource("RectangleShape2D_rgyib")
 
 [node name="HitBox" type="Area2D" parent="."]
+visible = false
 script = ExtResource("9_hg6s5")
 damage = 10
 metadata/_custom_type_script = "uid://dupmy3pxqk2hc"

@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://u8cb3ss121rq" path="res://assets/Tiny Swords (Free Pack)/Terrain/Tilemap_color1.png" id="1_1q0j8"]
 [ext_resource type="Texture2D" uid="uid://cmbe8o2yy2ibx" path="res://assets/Tiny Swords (Free Pack)/Terrain/Water Background color.png" id="2_n2bu5"]
 [ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://player/player.tscn" id="3_fpksy"]
-[ext_resource type="PackedScene" uid="uid://blljsr5p8x58b" path="res://units/blue_warrior/blue_warriror.tscn" id="4_n2bu5"]
-[ext_resource type="PackedScene" uid="uid://bwchi0yrqso3e" path="res://units/lancer.tscn" id="5_fpksy"]
+[ext_resource type="PackedScene" uid="uid://blljsr5p8x58b" path="res://AI/warrior/blue_warriror.tscn" id="4_n2bu5"]
+[ext_resource type="PackedScene" uid="uid://bwchi0yrqso3e" path="res://AI/lancer/lancer.tscn" id="5_fpksy"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_bhpv2"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -1685,7 +1685,6 @@ tile_set = SubResource("TileSet_g6kkd")
 y_sort_enabled = true
 
 [node name="Player" parent="Y-Sorted" instance=ExtResource("3_fpksy")]
-z_index = 0
 position = Vector2(11, -10)
 
 [node name="BlueWarriror" parent="Y-Sorted" instance=ExtResource("4_n2bu5")]
