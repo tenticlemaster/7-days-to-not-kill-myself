@@ -1,14 +1,16 @@
-[gd_scene load_steps=24 format=3 uid="uid://blljsr5p8x58b"]
+[gd_scene load_steps=27 format=3 uid="uid://blljsr5p8x58b"]
 
-[ext_resource type="Script" uid="uid://gmccgec68ass" path="res://AI/warrior/blue_warriror.gd" id="1_krmrl"]
+[ext_resource type="Script" uid="uid://gmccgec68ass" path="res://AI/warrior/warriror.gd" id="1_krmrl"]
 [ext_resource type="Texture2D" uid="uid://cewldsjhxkjp0" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Warrior/Warrior_Idle.png" id="1_mfj5x"]
-[ext_resource type="Script" uid="uid://bdgilp7eld00m" path="res://state_machine/state_machine.gd" id="2_0iwyy"]
 [ext_resource type="Texture2D" uid="uid://c0ehlbdgdy3kd" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Warrior/Warrior_Attack1.png" id="2_aqb41"]
-[ext_resource type="Script" uid="uid://b3any077fxcq3" path="res://AI/warrior/idle.gd" id="3_jl3kx"]
 [ext_resource type="Texture2D" uid="uid://doued777gnn6l" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Warrior/Warrior_Run.png" id="4_aswwt"]
 [ext_resource type="Script" uid="uid://dupmy3pxqk2hc" path="res://components/hitbox.gd" id="5_4mtyu"]
-[ext_resource type="Script" uid="uid://b82wlsni1xysi" path="res://AI/warrior/chase.gd" id="6_aswwt"]
+[ext_resource type="Script" uid="uid://df2atn8h2unty" path="res://AI/state_machine/ai_state_machine.gd" id="5_uxlec"]
+[ext_resource type="Script" uid="uid://bgei4yppra30b" path="res://AI/state_machine/states/ai_idle.gd" id="6_uxlec"]
+[ext_resource type="Script" uid="uid://ds6ybrp8h1ofy" path="res://AI/state_machine/states/ai_wonder.gd" id="7_v0hpv"]
+[ext_resource type="Script" uid="uid://bnb35inmmthlg" path="res://AI/state_machine/states/ai_chase.gd" id="8_kjk10"]
 [ext_resource type="Script" uid="uid://xveqqntv8i4c" path="res://components/health.gd" id="9_75q1q"]
+[ext_resource type="Script" uid="uid://bcxtpv428c1qy" path="res://AI/warrior/attack.gd" id="9_llcye"]
 [ext_resource type="Script" uid="uid://bard2vtbocnha" path="res://components/hurtbox.gd" id="10_1o6l0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhrs7"]
@@ -315,7 +317,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_75q1q"]
-resource_name = "run"
+resource_name = "run_right"
 length = 0.6
 loop_mode = 1
 step = 0.1
@@ -355,6 +357,72 @@ tracks/2/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Sprite2D:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_v0hpv"]
+resource_name = "run_left"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_aswwt")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Sprite2D:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_aqb41"]
 _data = {
@@ -362,84 +430,24 @@ _data = {
 &"attack_left": SubResource("Animation_krmrl"),
 &"attack_right": SubResource("Animation_iai0d"),
 &"idle": SubResource("Animation_0iwyy"),
-&"run": SubResource("Animation_75q1q")
+&"run_left": SubResource("Animation_v0hpv"),
+&"run_right": SubResource("Animation_75q1q")
 }
 
-[sub_resource type="GDScript" id="GDScript_75q1q"]
-script/source = "extends State
+[sub_resource type="AnimationRootNode" id="AnimationRootNode_v0hpv"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_75q1q"]
+radius = 300.0
 
-@export var wander_range: float
-@export var speed: float
+[sub_resource type="CircleShape2D" id="CircleShape2D_v0hpv"]
+radius = 75.0
 
-@onready var animation_player := $\"../../AnimationPlayer\"
-@onready var character_body := $\"../..\"
-@onready var navigation_agent := $\"../../NavigationAgent2D\"
-@onready var sprite := $\"../../Sprite2D\"
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_75q1q"]
+size = Vector2(120, 105)
 
-var home_positon: Vector2
-
-
-func _ready() -> void:
-	home_positon = character_body.position
-
-
-func Enter() -> void:
-	animation_player.play(\"run\")
-	
-	navigation_agent.target_position = random_point_in_circle_centered(home_positon, wander_range)
-	while !navigation_agent.is_target_reachable():
-		navigation_agent.target_position = random_point_in_circle_centered(home_positon, wander_range)
-
-
-func PhysicsUpdate(_delta) -> void:
-	var direction = character_body.to_local(navigation_agent.get_next_path_position()).normalized()
-	
-	if direction.x > 0:
-		sprite.flip_h = false
-	elif direction.x < 0:
-		sprite.flip_h = true
-	
-	character_body.velocity = direction * speed
-	character_body.move_and_slide()
-	
-	if navigation_agent.is_navigation_finished():
-		ChangeStateTo(\"idle\")
-
-
-func _on_player_detection_body_entered(body: Node2D) -> void:
-	if body is Player:
-		ChangeStateTo(\"chase\")
-
-
-func random_point_in_circle_centered(center: Vector2, radius: float) -> Vector2:
-	var random_angle = randf() * TAU
-	var random_radius = randf() * radius  #Not uniform on purpose
-	
-	return center + Vector2(
-		cos(random_angle) * random_radius,
-		sin(random_angle) * random_radius
-	)
-"
-
-[sub_resource type="GDScript" id="GDScript_aswwt"]
-script/source = "extends State
-
-
-@onready var animation_player := $\"../../AnimationPlayer\"
-@onready var sprite := $\"../../Sprite2D\"
-
-
-func Enter() -> void:
-	if !sprite.flip_h:
-		animation_player.play(\"attack_right\")
-	else:
-		animation_player.play(\"attack_left\")
-
-
-func _on_animation_finished() -> void:
-	ChangeStateTo(\"idle\")
-"
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_syi5h"]
+radius = 25.0
+height = 70.0
 
 [sub_resource type="GDScript" id="GDScript_1o6l0"]
 script/source = "extends NavigationAgent2D
@@ -449,17 +457,7 @@ func _ready() -> void:
 	pass
 "
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_75q1q"]
-radius = 300.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_75q1q"]
-size = Vector2(120, 105)
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_syi5h"]
-radius = 25.0
-height = 70.0
-
-[node name="BlueWarriror" type="CharacterBody2D"]
+[node name="Warriror" type="CharacterBody2D"]
 y_sort_enabled = true
 collision_mask = 0
 motion_mode = 1
@@ -479,38 +477,23 @@ libraries = {
 &"": SubResource("AnimationLibrary_aqb41")
 }
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state")]
-script = ExtResource("2_0iwyy")
-starting_state = NodePath("Idle")
-metadata/_custom_type_script = "uid://bdgilp7eld00m"
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../CollisionShape2D")
+tree_root = SubResource("AnimationRootNode_v0hpv")
+anim_player = NodePath("../AnimationPlayer")
 
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("3_jl3kx")
-
-[node name="Wonder" type="Node" parent="StateMachine"]
-script = SubResource("GDScript_75q1q")
-wander_range = 150.0
-speed = 100.0
-
-[node name="Chase" type="Node" parent="StateMachine"]
-script = ExtResource("6_aswwt")
-speed = 200.0
-
-[node name="Attack" type="Node" parent="StateMachine"]
-script = SubResource("GDScript_aswwt")
-
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-simplify_path = true
-avoidance_layers = 0
-debug_enabled = true
-script = SubResource("GDScript_1o6l0")
-
-[node name="PlayerDetection" type="Area2D" parent="."]
+[node name="ChaseArea" type="Area2D" parent="."]
 visible = false
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChaseArea"]
 shape = SubResource("CircleShape2D_75q1q")
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("CircleShape2D_v0hpv")
 
 [node name="HitBox" type="Area2D" parent="."]
 script = ExtResource("5_4mtyu")
@@ -533,6 +516,37 @@ metadata/_custom_type_script = "uid://bard2vtbocnha"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 shape = SubResource("CapsuleShape2D_syi5h")
 
-[connection signal="body_entered" from="PlayerDetection" to="StateMachine/Idle" method="_on_player_detection_body_entered"]
-[connection signal="body_entered" from="PlayerDetection" to="StateMachine/Wonder" method="_on_player_detection_body_entered"]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_player", "animation_tree", "sprite", "character_body", "navigation_agent", "chase_area", "attack_area", "starting_state")]
+script = ExtResource("5_uxlec")
+animation_player = NodePath("../AnimationPlayer")
+animation_tree = NodePath("../AnimationTree")
+sprite = NodePath("../Sprite2D")
+character_body = NodePath("..")
+navigation_agent = NodePath("../NavigationAgent2D")
+chase_area = NodePath("../ChaseArea")
+attack_area = NodePath("../AttackArea")
+starting_state = NodePath("Idle")
+metadata/_custom_type_script = "uid://bdgilp7eld00m"
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("6_uxlec")
+
+[node name="Wonder" type="Node" parent="StateMachine"]
+script = ExtResource("7_v0hpv")
+wander_range = 150.0
+
+[node name="Chase" type="Node" parent="StateMachine"]
+script = ExtResource("8_kjk10")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("9_llcye")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+simplify_path = true
+avoidance_layers = 0
+debug_enabled = true
+script = SubResource("GDScript_1o6l0")
+
+[connection signal="body_entered" from="ChaseArea" to="StateMachine/Idle" method="_on_player_detection_body_entered"]
+[connection signal="body_entered" from="ChaseArea" to="StateMachine/Wonder" method="_on_player_detection_body_entered"]
 [connection signal="death" from="Health" to="." method="_on_health_death"]
