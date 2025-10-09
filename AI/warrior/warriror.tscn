@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=3 uid="uid://blljsr5p8x58b"]
 
-[ext_resource type="Script" uid="uid://gmccgec68ass" path="res://AI/warrior/blue_warriror.gd" id="1_krmrl"]
+[ext_resource type="Script" uid="uid://gmccgec68ass" path="res://AI/warrior/warriror.gd" id="1_krmrl"]
 [ext_resource type="Texture2D" uid="uid://cewldsjhxkjp0" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Warrior/Warrior_Idle.png" id="1_mfj5x"]
 [ext_resource type="Script" uid="uid://bdgilp7eld00m" path="res://state_machine/state_machine.gd" id="2_0iwyy"]
 [ext_resource type="Texture2D" uid="uid://c0ehlbdgdy3kd" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Warrior/Warrior_Attack1.png" id="2_aqb41"]
@@ -459,7 +459,7 @@ size = Vector2(120, 105)
 radius = 25.0
 height = 70.0
 
-[node name="BlueWarriror" type="CharacterBody2D"]
+[node name="Warriror" type="CharacterBody2D"]
 y_sort_enabled = true
 collision_mask = 0
 motion_mode = 1
