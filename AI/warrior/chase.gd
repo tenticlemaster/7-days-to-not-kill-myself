@@ -12,7 +12,6 @@ extends State
 
 
 func Enter() -> void:
-	print("chase")
 	animation_player.play("run")
 
 

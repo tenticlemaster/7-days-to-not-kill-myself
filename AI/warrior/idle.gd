@@ -13,7 +13,6 @@ func _ready() -> void:
 
 
 func Enter() -> void:
-	print("idle")
 	animation_player.play("idle")
 	
 	wonder_timer.start(randi_range(1, 3))

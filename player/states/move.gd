@@ -13,10 +13,12 @@ func PhysicsUpdate(_delta) -> void:
 	
 	animation_player.play("run_right" if direction.x > 0 else "run_left")
 	
-	player.velocity = player.velocity.move_toward(
-		direction * player.speed,
-		player.acceleration * _delta
-	)
+	#player.velocity = player.velocity.move_toward(
+		#direction * player.speed,
+		#player.acceleration * _delta
+	#)
+	
+	player.velocity = direction * player.speed
 	player.move_and_slide()
 
 

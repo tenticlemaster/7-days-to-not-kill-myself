@@ -11,6 +11,7 @@ func Update(_delta) -> void:
 
 
 func PhysicsUpdate(_delta) -> void:
+	return
 	player.velocity = player.velocity.move_toward(
 		Vector2.ZERO,
 		player.friction * _delta
