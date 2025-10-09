@@ -1004,8 +1004,16 @@ position = Vector2(3, -101.5)
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("RectangleShape2D_r65nc")
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_player", "animation_tree", "sprite", "character_body", "navigation_agent", "chase_area", "attack_area", "starting_state")]
 script = ExtResource("10_doqtd")
+animation_player = NodePath("../AnimationPlayer")
+animation_tree = NodePath("../AnimationTree")
+sprite = NodePath("../Sprite2D")
+character_body = NodePath("..")
+navigation_agent = NodePath("../NavigationAgent2D")
+chase_area = NodePath("../ChaseArea")
+attack_area = NodePath("../AttackArea")
+starting_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("10_haohg")
