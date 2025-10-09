@@ -418,3 +418,5 @@ metadata/_custom_type_script = "uid://dupmy3pxqk2hc"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 position = Vector2(6, 6.5)
 shape = SubResource("RectangleShape2D_yllr7")
+
+[connection signal="health_update" from="Health" to="." method="_on_health_health_update"]
