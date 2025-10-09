@@ -14,4 +14,4 @@ func freeze_frame(duration: float = 0.4, time_scale: float = 0.1) -> void:
 
 
 func _on_health_health_update() -> void:
-	freeze_frame()
+	freeze_frame(10, .01)
