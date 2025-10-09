@@ -1687,8 +1687,10 @@ y_sort_enabled = true
 [node name="Player" parent="Y-Sorted" instance=ExtResource("3_fpksy")]
 position = Vector2(11, -10)
 
-[node name="BlueWarriror" parent="Y-Sorted" instance=ExtResource("4_n2bu5")]
+[node name="BlueWarriror" parent="Y-Sorted" node_paths=PackedStringArray("player") instance=ExtResource("4_n2bu5")]
 position = Vector2(923, -192)
+player = NodePath("../Player")
+speed = 200.0
 
 [node name="BlueLancer" parent="Y-Sorted" node_paths=PackedStringArray("player") instance=ExtResource("5_fpksy")]
 y_sort_enabled = false

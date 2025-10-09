@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bwchi0yrqso3e"]
+[gd_scene load_steps=41 format=3 uid="uid://bwchi0yrqso3e"]
 
 [ext_resource type="Script" uid="uid://bpcl62orko0ti" path="res://AI/ai_body.gd" id="1_s6pgs"]
 [ext_resource type="Texture2D" uid="uid://5gkubkgjift7" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Lancer/Lancer_Idle.png" id="1_wdy4r"]
@@ -11,6 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://bop2vprtf1iwb" path="res://assets/Tiny Swords (Free Pack)/Units/Blue Units/Lancer/Lancer_Down_Defence.png" id="8_6lmv6"]
 [ext_resource type="Script" uid="uid://df2atn8h2unty" path="res://AI/state_machine/ai_state_machine.gd" id="10_doqtd"]
 [ext_resource type="Script" uid="uid://bgei4yppra30b" path="res://AI/state_machine/states/ai_idle.gd" id="10_haohg"]
+[ext_resource type="Script" uid="uid://ds6ybrp8h1ofy" path="res://AI/state_machine/states/ai_wonder.gd" id="12_exhoh"]
+[ext_resource type="Script" uid="uid://bnb35inmmthlg" path="res://AI/state_machine/states/ai_chase.gd" id="13_53osx"]
+[ext_resource type="Script" uid="uid://c0kn814dx5c3g" path="res://AI/lancer/attack.gd" id="14_ko87x"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vihfg"]
 height = 40.0
@@ -733,7 +736,7 @@ tracks/5/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_uj3ud"]
-resource_name = "run"
+resource_name = "run_right"
 length = 0.6
 loop_mode = 1
 step = 0.1
@@ -773,6 +776,72 @@ tracks/2/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ko87x"]
+resource_name = "run_left"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_khedj")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5dx2l"]
 _data = {
@@ -786,7 +855,8 @@ _data = {
 &"lancer_up_attack": SubResource("Animation_tbr1e"),
 &"lancer_up_left_attack": SubResource("Animation_jmla8"),
 &"lancer_up_right_attack": SubResource("Animation_dyfq1"),
-&"run": SubResource("Animation_uj3ud")
+&"run_left": SubResource("Animation_ko87x"),
+&"run_right": SubResource("Animation_uj3ud")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kyyos"]
@@ -841,119 +911,6 @@ radius = 150.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r65nc"]
 size = Vector2(16, 37)
 
-[sub_resource type="GDScript" id="GDScript_wdy4r"]
-script/source = "extends AIState
-
-
-@export var wander_range: float
-var home_position: Vector2
-
-
-func _ready() -> void:
-	home_position = $\"../..\".global_position
-
-
-func Enter() -> void:
-	animation_player.play(\"run\")
-	
-	target_reacheble_position()
-
-
-func Update(_delta) -> void:
-	if chase_area.overlaps_body(character_body.player):
-		ChangeStateTo(\"chase\")
-
-
-func PhysicsUpdate(_delta) -> void:
-	var direction = character_body.to_local(navigation_agent.get_next_path_position()).normalized()
-	
-	if direction.x > 0:
-		sprite.flip_h = false
-	elif direction.x < 0:
-		sprite.flip_h = true
-	
-	character_body.velocity = direction * character_body.speed
-	character_body.move_and_slide()
-	
-	if navigation_agent.is_navigation_finished():
-		ChangeStateTo(\"idle\")
-
-
-func target_reacheble_position() -> void:
-	while true:
-		navigation_agent.target_position = random_point_in_circle_centered(home_position, wander_range)
-		if navigation_agent.is_target_reachable():
-			break
-
-
-func random_point_in_circle_centered(center: Vector2, radius: float) -> Vector2:
-	var random_angle = randf() * TAU
-	var random_radius = randf() * radius  #Not uniform on purpose
-	
-	return center + Vector2(
-		cos(random_angle) * random_radius,
-		sin(random_angle) * random_radius
-	)
-"
-
-[sub_resource type="GDScript" id="GDScript_khedj"]
-script/source = "extends AIState
-
-
-func Update(_delta) -> void:
-	if attack_area.overlaps_body(character_body.player):
-		ChangeStateTo('attack')
-
-
-func PhysicsUpdate(_delta) -> void:
-	if chase_area.overlaps_body(character_body.player):
-		navigation_agent.target_position = character_body.player.global_position
-	
-	if navigation_agent.is_navigation_finished():
-		animation_player.play(\"idle\")
-		animation_player.stop()
-	else:
-		animation_player.play(\"run\")
-		
-		var direction = character_body.to_local(navigation_agent.get_next_path_position()).normalized()
-	
-		if direction.x > 0:
-			sprite.flip_h = false
-		elif direction.x < 0:
-			sprite.flip_h = true
-		
-		character_body.velocity = direction * character_body.speed
-		character_body.move_and_slide()
-	
-	
-	if navigation_agent.is_navigation_finished() and !chase_area.overlaps_body(character_body.player):
-			ChangeStateTo(\"idle\")
-"
-
-[sub_resource type="GDScript" id="GDScript_7jitu"]
-script/source = "extends AIState
-
-
-@export var hitbox: HitBox
-
-
-func Enter() -> void:
-	animation_tree.active = true
-	hitbox.monitorable = true
-
-
-func Update(_delta) -> void:
-	if !attack_area.overlaps_body(character_body.player):
-		ChangeStateTo('idle')
-	
-	animation_tree.set(\"parameters/blend_position\", character_body.to_local(character_body.player.global_position).normalized())
-
-
-func Exit() -> void:
-	animation_tree.active = false
-	hitbox.monitorable = false
-"
-
 [node name="Lancer" type="CharacterBody2D"]
 y_sort_enabled = true
 collision_layer = 0
@@ -1004,19 +961,27 @@ position = Vector2(3, -101.5)
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("RectangleShape2D_r65nc")
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("animation_player", "animation_tree", "sprite", "character_body", "navigation_agent", "chase_area", "attack_area", "starting_state")]
 script = ExtResource("10_doqtd")
+animation_player = NodePath("../AnimationPlayer")
+animation_tree = NodePath("../AnimationTree")
+sprite = NodePath("../Sprite2D")
+character_body = NodePath("..")
+navigation_agent = NodePath("../NavigationAgent2D")
+chase_area = NodePath("../ChaseArea")
+attack_area = NodePath("../AttackArea")
+starting_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("10_haohg")
 
 [node name="Wonder" type="Node" parent="StateMachine"]
-script = SubResource("GDScript_wdy4r")
+script = ExtResource("12_exhoh")
 wander_range = 200.0
 
 [node name="Chase" type="Node" parent="StateMachine"]
-script = SubResource("GDScript_khedj")
+script = ExtResource("13_53osx")
 
 [node name="Attack" type="Node" parent="StateMachine" node_paths=PackedStringArray("hitbox")]
-script = SubResource("GDScript_7jitu")
+script = ExtResource("14_ko87x")
 hitbox = NodePath("../../HitBox")

@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends AIBody
 
 
 func _on_health_death() -> void:
