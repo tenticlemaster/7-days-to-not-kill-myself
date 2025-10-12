@@ -1,11 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://birw3laav5bvi"]
+[gd_scene load_steps=5 format=3 uid="uid://birw3laav5bvi"]
 
-[ext_resource type="PackedScene" uid="uid://blljsr5p8x58b" path="res://AI/warrior/warriror.tscn" id="2_oein3"]
+[ext_resource type="Script" uid="uid://bard2vtbocnha" path="res://components/hurtbox.gd" id="2_s6hhk"]
 [ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://player/player.tscn" id="2_u3p1o"]
+[ext_resource type="Texture2D" uid="uid://c4yvkda6gmw2i" path="res://icon.svg" id="3_ygfu8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pt0wf"]
+size = Vector2(130, 130)
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("2_u3p1o")]
 
-[node name="BlueWarriror" parent="." instance=ExtResource("2_oein3")]
-position = Vector2(227, -2)
+[node name="HurtBox" type="Area2D" parent="."]
+position = Vector2(256, 0)
+script = ExtResource("2_s6hhk")
+metadata/_custom_type_script = "uid://bard2vtbocnha"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("RectangleShape2D_pt0wf")
+
+[node name="Sprite2D" type="Sprite2D" parent="HurtBox"]
+texture = ExtResource("3_ygfu8")

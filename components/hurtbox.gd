@@ -5,14 +5,10 @@ extends Area2D
 signal damage_recieved
 
 
-@export var health: Health
-
-
 func _ready() -> void:
-	connect("area_entered", _on_area_entered)
+	area_entered.connect(_on_area_entered)
 
 
-func _on_area_entered(hitbox: HitBox) -> void:
-	if hitbox != null:
-		health.health -= hitbox.damage
-		damage_recieved.emit(hitbox.damage)
+func _on_area_entered(area: Area2D) -> void:
+	if area is HitBox:
+		print("ouch")

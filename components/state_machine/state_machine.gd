@@ -1,10 +1,11 @@
-class_name StateMachine
 extends Node
+class_name StateMachine
 
 
 @export var starting_state: State
 var current_state: State
 var states: Dictionary
+signal state_changed(new_state_name: String)
 
 
 func _ready() -> void:
@@ -33,3 +34,5 @@ func _on_change_state(state: State, new_state_name: String):
 	current_state.Exit()
 	states[new_lowercase_state_name].Enter()
 	current_state = states[new_lowercase_state_name]
+	
+	state_changed.emit(new_lowercase_state_name)
