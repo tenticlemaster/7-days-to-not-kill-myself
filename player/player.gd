@@ -2,7 +2,7 @@ extends CharacterBody2D
 class_name Player
 
 @export var max_speed: float
-@export var friction: float
+@export var acceleration: float
 var speed: float
 var attack_velocity: Vector2
 
@@ -14,7 +14,7 @@ func _physics_process(delta: float) -> void:
 	if attack_velocity:
 		velocity = attack_velocity
 	else:
-		velocity = velocity.move_toward(move_velocity, friction * delta)
+		velocity = velocity.move_toward(move_velocity, acceleration * delta)
 	
 	move_and_slide()
 
