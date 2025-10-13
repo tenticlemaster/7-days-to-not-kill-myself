@@ -1,8 +1,8 @@
 [gd_scene load_steps=30 format=4 uid="uid://cyjsp2qpshsrn"]
 
-[ext_resource type="Texture2D" uid="uid://u8cb3ss121rq" path="res://assets/Tiny Swords (Free Pack)/Terrain/Tilemap_color1.png" id="1_1q0j8"]
-[ext_resource type="Texture2D" uid="uid://cmbe8o2yy2ibx" path="res://assets/Tiny Swords (Free Pack)/Terrain/Water Background color.png" id="2_n2bu5"]
-[ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://player/player.tscn" id="3_fpksy"]
+[ext_resource type="Texture2D" uid="uid://u8cb3ss121rq" path="res://assets/Tiny Swords (Free Pack)/Terrain/Tilemap_color1.png" id="1_ky62u"]
+[ext_resource type="Texture2D" uid="uid://cmbe8o2yy2ibx" path="res://assets/Tiny Swords (Free Pack)/Terrain/Water Background color.png" id="2_4diwn"]
+[ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://project/player/player.tscn" id="3_3hrx2"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_bhpv2"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -103,7 +103,7 @@ agent_radius = 0.0
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_63i0g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4idu5"]
-texture = ExtResource("1_1q0j8")
+texture = ExtResource("1_ky62u")
 6:1/0 = 0
 7:1/0 = 0
 8:1/0 = 0
@@ -1631,7 +1631,7 @@ texture = ExtResource("1_1q0j8")
 38:30/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_63i0g"]
-texture = ExtResource("2_n2bu5")
+texture = ExtResource("2_4diwn")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
@@ -1672,7 +1672,7 @@ navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_4idu5")
 sources/1 = SubResource("TileSetAtlasSource_63i0g")
 
-[node name="Map1" type="Node2D"]
+[node name="TestMap" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 z_index = -10
@@ -1682,4 +1682,4 @@ tile_set = SubResource("TileSet_g6kkd")
 [node name="Y-Sorted" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="Player" parent="Y-Sorted" instance=ExtResource("3_fpksy")]
+[node name="Player" parent="Y-Sorted" instance=ExtResource("3_3hrx2")]
