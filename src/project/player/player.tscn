@@ -480,11 +480,11 @@ acceleration = 1500.0
 metadata/_custom_type_script = "uid://b12gw31gp2b6n"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 30)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_4ntmi")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -32)
 texture = ExtResource("2_boad6")
 hframes = 8
 
@@ -518,7 +518,6 @@ MAX_HEALTH = 100.0
 metadata/_custom_type_script = "uid://xveqqntv8i4c"
 
 [node name="HurtBox" type="Area2D" parent="."]
-position = Vector2(0, -30)
 script = ExtResource("7_boad6")
 metadata/_custom_type_script = "uid://bard2vtbocnha"
 
@@ -531,7 +530,6 @@ script = ExtResource("9_hg6s5")
 metadata/_custom_type_script = "uid://dupmy3pxqk2hc"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(0, -26)
 shape = SubResource("CircleShape2D_ebec5")
 disabled = true
 
