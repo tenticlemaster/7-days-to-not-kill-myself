@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b7rrbl58e5lm6" path="res://addons/crt_shader/CRTFrame.png" id="3_frwfh"]
 
 [node name="CRTOverlay" type="CanvasLayer"]
-layer = 1000
+layer = 10
 
 [node name="CRTScreen" type="ColorRect" parent="."]
 material = ExtResource("1_sy0vq")
