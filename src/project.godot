@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="7 days not to kill myself"
-run/main_scene="uid://cyjsp2qpshsrn"
+run/main_scene="uid://dhbwhdxiuxa1h"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -69,3 +69,7 @@ attack={
 2d_physics/layer_5="EnemyCollision"
 2d_physics/layer_6="EnemyHurtbox"
 2d_physics/layer_7="EnemyHitbox"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

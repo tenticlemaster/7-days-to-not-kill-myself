@@ -1,0 +1,19 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://ds5lmqjal7gwd"]
+
+[ext_resource type="FontFile" uid="uid://clux81ecdbqiw" path="res://assets/fonts/futura-pixel.otf" id="1_oiie3"]
+[ext_resource type="FontFile" uid="uid://d4ijnusktbp2m" path="res://assets/fonts/ITC Benguiat Bold.otf" id="2_c0r53"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c0r53"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[resource]
+Button/colors/font_color = Color(0.37791833, 0.37791917, 0.3779185, 1)
+Button/font_sizes/font_size = 32
+Button/fonts/font = ExtResource("1_oiie3")
+Button/styles/disabled = SubResource("StyleBoxFlat_c0r53")
+Button/styles/focus = SubResource("StyleBoxFlat_c0r53")
+Button/styles/hover = SubResource("StyleBoxFlat_c0r53")
+Button/styles/normal = SubResource("StyleBoxFlat_c0r53")
+Button/styles/pressed = SubResource("StyleBoxFlat_c0r53")
+Label/font_sizes/font_size = 70
+Label/fonts/font = ExtResource("2_c0r53")
