@@ -1,43 +1,20 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhbwhdxiuxa1h"]
+[gd_scene load_steps=8 format=3 uid="uid://dhbwhdxiuxa1h"]
 
 [ext_resource type="Theme" uid="uid://ds5lmqjal7gwd" path="res://assets/Themes/MainTheme.tres" id="1_16t1a"]
 [ext_resource type="PackedScene" uid="uid://cgqthhtspepvv" path="res://project/components/CRT/crt_overlay.tscn" id="1_mes7x"]
-[ext_resource type="AudioStream" uid="uid://77n016jy5fmy" path="res://assets/sounds/Text_Articulator.mp3" id="3_7aaji"]
 [ext_resource type="PackedScene" uid="uid://da8i5eajysp74" path="res://project/Logo.tscn" id="3_ltku6"]
 [ext_resource type="AudioStream" uid="uid://bctbsimpb1v47" path="res://assets/sounds/crt_startup_with_noise_loop_from_10s.mp3" id="4_wyh3o"]
-
-[sub_resource type="GDScript" id="GDScript_01a3w"]
-script/source = "extends VBoxContainer
-
-
-var audio_player: AudioStreamPlayer2D
-
-
-func _ready() -> void:
-	audio_player = get_node(\"ButtonsSound\")
-	
-	get_node(\"NewGame\").grab_focus()
-	
-	for child in get_children():
-		if child is Button:
-			child.pressed.connect(_on_button_action)
-			child.focus_entered.connect(_on_button_action)
-
-
-func _on_button_action() -> void:
-	audio_player.play()
-"
 
 [sub_resource type="GDScript" id="GDScript_ltku6"]
 script/source = "extends Button
 
 
 func _ready() -> void:
+	grab_focus()
 	pressed.connect(_on_pressed)
 
 
 func _on_pressed() -> void:
-	await get_tree().create_timer(1).timeout
 	get_tree().change_scene_to_file(\"res://project/TestMap.tscn\")
 "
 
@@ -50,20 +27,40 @@ func _ready() -> void:
 
 
 func _on_pressed() -> void:
-	await get_tree().create_timer(1).timeout
 	get_tree().quit()
 "
 
-[sub_resource type="GDScript" id="GDScript_ov13v"]
-script/source = "extends ColorRect
+[sub_resource type="GDScript" id="GDScript_7aaji"]
+script/source = "extends AudioStreamPlayer2D
 
 
-func _on_exit_pressed() -> void:
-	visible = true
+var times_new_game_pressed = 0
 
 
 func _on_new_game_pressed() -> void:
-	visible = true
+	if times_new_game_pressed > 0:
+		play()
+	times_new_game_pressed += 1
+
+
+func _on_new_game_focus_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_credits_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_credits_focus_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_exit_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_exit_focus_entered() -> void:
+	pass # Replace with function body.
 "
 
 [node name="MainMenu" type="Control"]
@@ -99,7 +96,6 @@ offset_right = 84.0
 offset_bottom = 167.5
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_01a3w")
 
 [node name="NewGame" type="Button" parent="MenuButtons"]
 layout_mode = 2
@@ -117,7 +113,7 @@ text = "Exit
 script = SubResource("GDScript_wyh3o")
 
 [node name="ButtonsSound" type="AudioStreamPlayer2D" parent="MenuButtons"]
-stream = ExtResource("3_7aaji")
+script = SubResource("GDScript_7aaji")
 
 [node name="Logo" parent="." instance=ExtResource("3_ltku6")]
 layout_mode = 1
@@ -129,16 +125,9 @@ stream = ExtResource("4_wyh3o")
 autoplay = true
 parameters/looping = true
 
-[node name="TransitionScreen" type="ColorRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-script = SubResource("GDScript_ov13v")
-
-[connection signal="pressed" from="MenuButtons/NewGame" to="TransitionScreen" method="_on_new_game_pressed"]
-[connection signal="pressed" from="MenuButtons/Exit" to="TransitionScreen" method="_on_exit_pressed"]
+[connection signal="focus_entered" from="MenuButtons/NewGame" to="MenuButtons/ButtonsSound" method="_on_new_game_focus_entered"]
+[connection signal="pressed" from="MenuButtons/NewGame" to="MenuButtons/ButtonsSound" method="_on_new_game_pressed"]
+[connection signal="focus_entered" from="MenuButtons/Credits" to="MenuButtons/ButtonsSound" method="_on_credits_focus_entered"]
+[connection signal="pressed" from="MenuButtons/Credits" to="MenuButtons/ButtonsSound" method="_on_credits_pressed"]
+[connection signal="focus_entered" from="MenuButtons/Exit" to="MenuButtons/ButtonsSound" method="_on_exit_focus_entered"]
+[connection signal="pressed" from="MenuButtons/Exit" to="MenuButtons/ButtonsSound" method="_on_exit_pressed"]
