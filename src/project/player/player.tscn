@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://bard2vtbocnha" path="res://project/components/hurtbox.gd" id="7_boad6"]
 [ext_resource type="Script" uid="uid://d2fraqnwxs7ns" path="res://project/player/states/attack.gd" id="8_8t03j"]
 [ext_resource type="Script" uid="uid://dupmy3pxqk2hc" path="res://project/components/hitbox.gd" id="9_hg6s5"]
-[ext_resource type="AudioStream" uid="uid://c15ch7rbsbm76" path="res://assets/sounds/walking_on_grass.mp3" id="13_d812d"]
+[ext_resource type="AudioStream" uid="uid://j18qkpg53keq" path="res://assets/sounds/walking_on_grass_16bit.mp3" id="13_qmvdl"]
 [ext_resource type="AudioStream" uid="uid://d3wgv3ux1nljx" path="res://assets/sounds/sword_sound_downsampled.mp3" id="14_qmvdl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ntmi"]
@@ -567,7 +567,7 @@ shape = SubResource("CircleShape2D_ebec5")
 disabled = true
 
 [node name="Walking" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("13_d812d")
+stream = ExtResource("13_qmvdl")
 script = SubResource("GDScript_qmvdl")
 
 [node name="Swing" type="AudioStreamPlayer2D" parent="."]

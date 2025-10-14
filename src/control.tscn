@@ -1,20 +1,19 @@
-[gd_scene load_steps=12 format=3 uid="uid://dhbwhdxiuxa1h"]
+[gd_scene load_steps=10 format=3 uid="uid://1k7e3k7iq5i7"]
 
-[ext_resource type="Theme" uid="uid://ds5lmqjal7gwd" path="res://assets/Themes/MainTheme.tres" id="1_16t1a"]
-[ext_resource type="PackedScene" uid="uid://cgqthhtspepvv" path="res://project/components/CRT/crt_overlay.tscn" id="1_mes7x"]
-[ext_resource type="AudioStream" uid="uid://77n016jy5fmy" path="res://assets/sounds/Text_Articulator.mp3" id="3_7aaji"]
-[ext_resource type="PackedScene" uid="uid://da8i5eajysp74" path="res://project/Logo.tscn" id="3_ltku6"]
-[ext_resource type="AudioStream" uid="uid://bctbsimpb1v47" path="res://assets/sounds/crt_startup_with_noise_loop_from_10s.mp3" id="4_wyh3o"]
+[ext_resource type="AudioStream" uid="uid://77n016jy5fmy" path="res://assets/sounds/Text_Articulator.mp3" id="1_0fbet"]
+[ext_resource type="PackedScene" uid="uid://cgqthhtspepvv" path="res://project/components/CRT/crt_overlay.tscn" id="1_62e2m"]
+[ext_resource type="AudioStream" uid="uid://b4g6awqu06qnr" path="res://assets/sounds/yay_16kbit.mp3" id="2_qtu10"]
 
-[sub_resource type="GDScript" id="GDScript_7aaji"]
-script/source = "extends Control
+[sub_resource type="GDScript" id="GDScript_kbped"]
+script/source = "extends AudioStreamPlayer2D
 
 
 func _ready() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	await get_tree().create_timer(3).timeout
+	play()
 "
 
-[sub_resource type="GDScript" id="GDScript_01a3w"]
+[sub_resource type="GDScript" id="GDScript_62e2m"]
 script/source = "extends VBoxContainer
 
 
@@ -22,6 +21,8 @@ var audio_player: AudioStreamPlayer2D
 
 
 func _ready() -> void:
+	await get_tree().create_timer(3).timeout
+	
 	audio_player = get_node(\"ButtonsSound\")
 	
 	get_node(\"NewGame\").grab_focus()
@@ -36,7 +37,7 @@ func _on_button_action() -> void:
 	audio_player.play()
 "
 
-[sub_resource type="GDScript" id="GDScript_ltku6"]
+[sub_resource type="GDScript" id="GDScript_qtu10"]
 script/source = "extends Button
 
 
@@ -49,7 +50,7 @@ func _on_pressed() -> void:
 	get_tree().change_scene_to_file(\"res://project/TestMap.tscn\")
 "
 
-[sub_resource type="GDScript" id="GDScript_1i54t"]
+[sub_resource type="GDScript" id="GDScript_fj5cn"]
 script/source = "extends Button
 
 
@@ -62,7 +63,7 @@ func _on_pressed() -> void:
 	get_tree().change_scene_to_file(\"res://credits.tscn\")
 "
 
-[sub_resource type="GDScript" id="GDScript_wyh3o"]
+[sub_resource type="GDScript" id="GDScript_ee4bf"]
 script/source = "extends Button
 
 
@@ -75,15 +76,20 @@ func _on_pressed() -> void:
 	get_tree().quit()
 "
 
-[sub_resource type="GDScript" id="GDScript_ov13v"]
+[sub_resource type="GDScript" id="GDScript_uchyk"]
 script/source = "extends ColorRect
 
 
-func _on_exit_pressed() -> void:
-	visible = true
+func _ready() -> void:
+	await get_tree().create_timer(3).timeout
+	visible = false
 
 
 func _on_new_game_pressed() -> void:
+	visible = true
+
+
+func _on_exit_pressed() -> void:
 	visible = true
 
 
@@ -91,17 +97,17 @@ func _on_credits_pressed() -> void:
 	visible = true
 "
 
-[node name="MainMenu" type="Control"]
+[node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_16t1a")
-script = SubResource("GDScript_7aaji")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="CRTOverlay" parent="." instance=ExtResource("1_62e2m")]
+
+[node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,7 +116,26 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="CRTOverlay" parent="." instance=ExtResource("1_mes7x")]
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -329.5
+offset_top = -147.0
+offset_right = 329.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 150
+text = "YOU WIN"
+
+[node name="Yay" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(0, -50)
+stream = ExtResource("2_qtu10")
+script = SubResource("GDScript_kbped")
 
 [node name="MenuButtons" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -120,44 +145,33 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -84.0
-offset_top = 60.5
+offset_top = 27.5
 offset_right = 84.0
-offset_bottom = 167.5
+offset_bottom = 134.5
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_01a3w")
+script = SubResource("GDScript_62e2m")
 
 [node name="NewGame" type="Button" parent="MenuButtons"]
 layout_mode = 2
 text = "New Game"
-script = SubResource("GDScript_ltku6")
+script = SubResource("GDScript_qtu10")
 
 [node name="Credits" type="Button" parent="MenuButtons"]
 layout_mode = 2
 text = "Credits"
-script = SubResource("GDScript_1i54t")
+script = SubResource("GDScript_fj5cn")
 
 [node name="Exit" type="Button" parent="MenuButtons"]
 layout_mode = 2
 text = "Exit
 "
-script = SubResource("GDScript_wyh3o")
+script = SubResource("GDScript_ee4bf")
 
 [node name="ButtonsSound" type="AudioStreamPlayer2D" parent="MenuButtons"]
-stream = ExtResource("3_7aaji")
-
-[node name="Logo" parent="." instance=ExtResource("3_ltku6")]
-layout_mode = 1
-offset_top = 64.99997
-offset_bottom = 64.99997
-
-[node name="CRTNoise" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_wyh3o")
-autoplay = true
-parameters/looping = true
+stream = ExtResource("1_0fbet")
 
 [node name="TransitionScreen" type="ColorRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -165,7 +179,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
-script = SubResource("GDScript_ov13v")
+script = SubResource("GDScript_uchyk")
 
 [connection signal="pressed" from="MenuButtons/NewGame" to="TransitionScreen" method="_on_new_game_pressed"]
 [connection signal="pressed" from="MenuButtons/Credits" to="TransitionScreen" method="_on_credits_pressed"]

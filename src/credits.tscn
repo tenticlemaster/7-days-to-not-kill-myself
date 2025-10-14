@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://hilnw2o8sowj"]
+
+[ext_resource type="PackedScene" uid="uid://cgqthhtspepvv" path="res://project/components/CRT/crt_overlay.tscn" id="1_nm7lk"]
+
+[sub_resource type="GDScript" id="GDScript_nm7lk"]
+script/source = "extends Control
+
+
+func _ready() -> void:
+	await get_tree().create_timer(3).timeout
+	get_tree().change_scene_to_file(\"res://project/MainMenu.tscn\")
+"
+
+[node name="Credits" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_nm7lk")
+
+[node name="CRTOverlay" parent="." instance=ExtResource("1_nm7lk")]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -171.5
+offset_top = -91.0
+offset_right = 171.5
+offset_bottom = 91.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 150
+text = "MGS"
