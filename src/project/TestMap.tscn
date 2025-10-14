@@ -1,9 +1,10 @@
-[gd_scene load_steps=31 format=4 uid="uid://cyjsp2qpshsrn"]
+[gd_scene load_steps=32 format=4 uid="uid://cyjsp2qpshsrn"]
 
 [ext_resource type="Texture2D" uid="uid://u8cb3ss121rq" path="res://assets/Tiny Swords (Free Pack)/Terrain/Tilemap_color1.png" id="1_ky62u"]
 [ext_resource type="Texture2D" uid="uid://cmbe8o2yy2ibx" path="res://assets/Tiny Swords (Free Pack)/Terrain/Water Background color.png" id="2_4diwn"]
 [ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://project/player/player.tscn" id="3_3hrx2"]
 [ext_resource type="PackedScene" uid="uid://cgqthhtspepvv" path="res://project/components/CRT/crt_overlay.tscn" id="4_4diwn"]
+[ext_resource type="AudioStream" uid="uid://mayue0bhafyq" path="res://assets/sounds/ass_nature_ambience.mp3" id="5_3hrx2"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_bhpv2"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -1686,3 +1687,8 @@ y_sort_enabled = true
 [node name="Player" parent="Y-Sorted" instance=ExtResource("3_3hrx2")]
 
 [node name="CRTOverlay" parent="." instance=ExtResource("4_4diwn")]
+
+[node name="NatureAmbince" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_3hrx2")
+autoplay = true
+parameters/looping = true
