@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dck7cq2ul5a1y"]
+[gd_scene load_steps=29 format=3 uid="uid://dck7cq2ul5a1y"]
 
 [ext_resource type="Script" uid="uid://b12gw31gp2b6n" path="res://project/player/player.gd" id="1_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://dso7ksbfdrqhh" path="res://assets/Tiny Swords (Free Pack)/Units/Black Units/Warrior/Warrior_Idle.png" id="2_boad6"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://d2fraqnwxs7ns" path="res://project/player/states/attack.gd" id="8_8t03j"]
 [ext_resource type="Script" uid="uid://dupmy3pxqk2hc" path="res://project/components/hitbox.gd" id="9_hg6s5"]
 [ext_resource type="AudioStream" uid="uid://c15ch7rbsbm76" path="res://assets/sounds/walking_on_grass.mp3" id="13_d812d"]
+[ext_resource type="AudioStream" uid="uid://d3wgv3ux1nljx" path="res://assets/sounds/sword_sound_downsampled.mp3" id="14_qmvdl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ntmi"]
 
@@ -483,6 +484,26 @@ func _on_state_machine_state_changed(new_state_name: String) -> void:
 		stop()
 "
 
+[sub_resource type="GDScript" id="GDScript_sac2q"]
+script/source = "extends AudioStreamPlayer2D
+
+
+var original_pitch: float
+
+
+func _ready() -> void:
+	original_pitch = pitch_scale
+
+
+func _on_state_machine_state_changed(new_state_name: String) -> void:
+	if new_state_name == \"attack\":
+		await get_tree().create_timer(.2).timeout
+		pitch_scale = original_pitch + randf_range(-.1, .1)
+		play()
+	else:
+		stop()
+"
+
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
 collision_mask = 2
@@ -549,7 +570,13 @@ disabled = true
 stream = ExtResource("13_d812d")
 script = SubResource("GDScript_qmvdl")
 
+[node name="Swing" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("14_qmvdl")
+pitch_scale = 1.1
+script = SubResource("GDScript_sac2q")
+
 [connection signal="state_changed" from="StateMachine" to="." method="_on_state_machine_state_changed"]
 [connection signal="state_changed" from="StateMachine" to="AnimationPlayer" method="_on_state_machine_state_changed"]
 [connection signal="state_changed" from="StateMachine" to="Walking" method="_on_state_machine_state_changed"]
+[connection signal="state_changed" from="StateMachine" to="Swing" method="_on_state_machine_state_changed"]
 [connection signal="damage_recieved" from="HurtBox" to="Health" method="_on_hurt_box_damage_recieved"]

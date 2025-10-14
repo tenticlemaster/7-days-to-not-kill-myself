@@ -1,10 +1,11 @@
-[gd_scene load_steps=32 format=4 uid="uid://cyjsp2qpshsrn"]
+[gd_scene load_steps=35 format=4 uid="uid://cyjsp2qpshsrn"]
 
 [ext_resource type="Texture2D" uid="uid://u8cb3ss121rq" path="res://assets/Tiny Swords (Free Pack)/Terrain/Tilemap_color1.png" id="1_ky62u"]
 [ext_resource type="Texture2D" uid="uid://cmbe8o2yy2ibx" path="res://assets/Tiny Swords (Free Pack)/Terrain/Water Background color.png" id="2_4diwn"]
 [ext_resource type="PackedScene" uid="uid://dck7cq2ul5a1y" path="res://project/player/player.tscn" id="3_3hrx2"]
 [ext_resource type="PackedScene" uid="uid://cgqthhtspepvv" path="res://project/components/CRT/crt_overlay.tscn" id="4_4diwn"]
 [ext_resource type="AudioStream" uid="uid://mayue0bhafyq" path="res://assets/sounds/ass_nature_ambience.mp3" id="5_3hrx2"]
+[ext_resource type="FontFile" uid="uid://clux81ecdbqiw" path="res://assets/fonts/futura-pixel.otf" id="6_lshok"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_bhpv2"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -1668,11 +1669,30 @@ texture = ExtResource("2_4diwn")
 3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_g6kkd"]
-physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 0
+physics_layer_0/collision_layer = 2
 navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_4idu5")
 sources/1 = SubResource("TileSetAtlasSource_63i0g")
+
+[sub_resource type="GDScript" id="GDScript_lshok"]
+script/source = "extends Area2D
+
+
+func _ready() -> void:
+	body_entered.connect(_on_body_enterd)
+
+
+func _on_body_enterd(body) -> void:
+	if body is Player:
+		get_node(\"GameByScreen\").visible = true
+		AudioServer.set_bus_mute(AudioServer.get_bus_index(\"Master\"), true)
+		await get_tree().create_timer(2).timeout
+		get_node(\"GameByScreen\").visible = false
+		AudioServer.set_bus_mute(AudioServer.get_bus_index(\"Master\"), false)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bd45h"]
+size = Vector2(20, 1000)
 
 [node name="TestMap" type="Node2D"]
 
@@ -1693,3 +1713,50 @@ autoplay = true
 parameters/looping = true
 
 [node name="CRTOverlay" parent="." instance=ExtResource("4_4diwn")]
+
+[node name="MadeByTrigger" type="Area2D" parent="."]
+position = Vector2(1790, 0)
+collision_layer = 0
+script = SubResource("GDScript_lshok")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MadeByTrigger"]
+shape = SubResource("RectangleShape2D_bd45h")
+
+[node name="GameByScreen" type="CanvasLayer" parent="MadeByTrigger"]
+visible = false
+
+[node name="BlackScreen" type="ColorRect" parent="MadeByTrigger/GameByScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MadeByTrigger/GameByScreen"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -147.5
+offset_top = -177.0
+offset_right = 147.5
+offset_bottom = 177.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="MadeBy" type="Label" parent="MadeByTrigger/GameByScreen/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_lshok")
+theme_override_font_sizes/font_size = 16
+text = "Made by"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mir" type="Label" parent="MadeByTrigger/GameByScreen/VBoxContainer"]
+layout_mode = 2
+text = "Mir"
+horizontal_alignment = 1
+vertical_alignment = 1
